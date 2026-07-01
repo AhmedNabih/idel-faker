@@ -1,11 +1,10 @@
 """Windows auto-startup via the per-user Registry Run key."""
 
-import logging
+from __future__ import annotations
+
 import os
 import sys
 import winreg
-
-log = logging.getLogger(__name__)
 
 APP_NAME = "idel-faker"
 RUN_KEY = r"Software\Microsoft\Windows\CurrentVersion\Run"
