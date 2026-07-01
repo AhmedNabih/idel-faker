@@ -34,6 +34,11 @@ Cannot keep you "Available" while the workstation is locked (Win+L or GPO
 auto-lock) — injected input is not registered as session activity when locked.
 The tool reports this honestly via the orange icon.
 
+Corporate Group Policy "machine inactivity limit" can still force a lock even
+while this tool is running and unpaused — `SetThreadExecutionState` suppresses
+sleep/screensaver idle timers but cannot override a GPO-enforced inactivity
+lock.
+
 ## Development
 
 ```

@@ -58,22 +58,26 @@ class TrayApp:
             self.icon.icon = make_icon(state)
 
     def _worker(self) -> None:
-        activity.keep_awake(True)
-        while not self._stop.wait(POLL_INTERVAL):
-            result = run_once(
-                paused=self._paused.is_set(),
-                idle_fn=seconds_since_last_input,
-                locked_fn=is_locked,
-                inject_fn=_inject,
-                threshold=IDLE_THRESHOLD,
-            )
-            if result == "paused":
-                self._set_state("grey")
-            elif result == "locked":
-                self._set_state("orange")
-            else:
-                self._set_state("green")
-            log.info("tick: %s", result)
+        try:
+            while not self._stop.wait(POLL_INTERVAL):
+                paused = self._paused.is_set()
+                activity.keep_awake(not paused)
+                result = run_once(
+                    paused=paused,
+                    idle_fn=seconds_since_last_input,
+                    locked_fn=is_locked,
+                    inject_fn=_inject,
+                    threshold=IDLE_THRESHOLD,
+                )
+                if result == "paused":
+                    self._set_state("grey")
+                elif result == "locked":
+                    self._set_state("orange")
+                else:
+                    self._set_state("green")
+                log.info("tick: %s", result)
+        finally:
+            activity.keep_awake(False)
 
     def run(self) -> None:
         thread = threading.Thread(target=self._worker, daemon=True)
@@ -83,7 +87,6 @@ class TrayApp:
         finally:
             self._stop.set()
             thread.join(timeout=POLL_INTERVAL + 2)
-            activity.keep_awake(False)
 
 
 def main() -> None:
