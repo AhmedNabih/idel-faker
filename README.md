@@ -97,6 +97,19 @@ python -m idel_faker.tray
 A tray icon appears in the Windows notification area. Right-click it for **Pause/Resume** and
 **Quit**. That's it — leave it running and it manages your presence automatically.
 
+## Build a Standalone .exe
+
+To produce a single self-contained `idel-faker.exe` (no Python needed on the target machine):
+
+```powershell
+pip install -r requirements-dev.txt
+powershell -ExecutionPolicy Bypass -File build.ps1
+```
+
+The build (PyInstaller, one-file, windowed) generates the app icon and writes the executable to
+`dist/idel-faker.exe`. Copy that file anywhere and run it; use the tray's **Start with Windows**
+toggle to have it launch at logon.
+
 ## Configuration
 
 Edit the constants at the top of [`idel_faker/tray.py`](idel_faker/tray.py):
@@ -105,6 +118,13 @@ Edit the constants at the top of [`idel_faker/tray.py`](idel_faker/tray.py):
 | --- | --- | --- |
 | `IDLE_THRESHOLD` | `60` | Seconds of genuine inactivity before input is injected. |
 | `POLL_INTERVAL` | `5` | Seconds between idle/lock checks. |
+
+## Start with Windows
+
+Right-click the tray icon and toggle **Start with Windows**. When checked, `idel-faker`
+registers itself under the per-user Registry Run key
+(`HKCU\Software\Microsoft\Windows\CurrentVersion\Run`, value `idel-faker`) and launches
+automatically at logon. Unchecking it removes the entry. No administrator rights are required.
 
 ## Tray Icon States
 

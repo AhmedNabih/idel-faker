@@ -1,4 +1,4 @@
-"""Tray icon images for each state."""
+"""Tray icon images for each state, and .ico export for packaging."""
 
 from PIL import Image, ImageDraw
 
@@ -8,11 +8,19 @@ _COLORS = {
     "orange": (230, 126, 34),
 }
 
+_ICO_SIZES = [(16, 16), (32, 32), (48, 48), (64, 64), (256, 256)]
 
-def make_icon(color: str) -> Image.Image:
-    """Return a 64x64 filled-circle icon for the given state color."""
+
+def make_icon(color: str, size: int = 64) -> Image.Image:
+    """Return a filled-circle icon of `size`x`size` for the given state color."""
     rgb = _COLORS[color]
-    img = Image.new("RGBA", (64, 64), (0, 0, 0, 0))
+    img = Image.new("RGBA", (size, size), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
-    draw.ellipse((8, 8, 56, 56), fill=rgb)
+    pad = size // 8
+    draw.ellipse((pad, pad, size - pad, size - pad), fill=rgb)
     return img
+
+
+def save_ico(path: str) -> None:
+    """Write a multi-size Windows .ico (from the green state icon) to `path`."""
+    make_icon("green", 256).save(path, format="ICO", sizes=_ICO_SIZES)
