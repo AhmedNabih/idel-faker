@@ -6,7 +6,7 @@
 
 [![Platform](https://img.shields.io/badge/platform-Windows-0078D6?logo=windows&logoColor=white)](#requirements)
 [![Python](https://img.shields.io/badge/python-3.8%2B-3776AB?logo=python&logoColor=white)](#requirements)
-[![Tests](https://img.shields.io/badge/tests-20%20passing-brightgreen)](#testing)
+[![Tests](https://img.shields.io/badge/tests-28%20passing-brightgreen)](#testing)
 [![Dependencies](https://img.shields.io/badge/deps-pystray%20%7C%20Pillow-lightgrey)](#requirements)
 [![License](https://img.shields.io/badge/license-MIT-blue)](#license)
 
@@ -79,7 +79,7 @@ at the machine. The moment you step away long enough, it quietly keeps you green
 ## Installation
 
 ```powershell
-git clone https://github.com/<your-username>/idel-faker.git
+git clone https://github.com/AhmedNabih/idel-faker.git
 cd idel-faker
 
 python -m venv .venv
@@ -179,7 +179,7 @@ pip install -r requirements-dev.txt
 pytest
 ```
 
-The suite (20 tests) covers the pure decision logic across all input combinations, the OS-wrapper
+The suite (28 tests) covers the pure decision logic across all input combinations, the OS-wrapper
 contracts, the worker's per-tick behavior including its error path, and the icon factory. The
 tray's GUI loop is validated manually, since pystray offers no headless test harness.
 
