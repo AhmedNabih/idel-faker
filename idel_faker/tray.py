@@ -6,6 +6,7 @@ import threading
 import pystray
 
 from . import activity
+from . import startup
 from .icons import make_icon
 from .idle_monitor import seconds_since_last_input
 from .session_state import is_locked
@@ -34,6 +35,11 @@ class TrayApp:
             "idel-faker",
             menu=pystray.Menu(
                 pystray.MenuItem(self._pause_label, self._toggle_pause),
+                pystray.MenuItem(
+                    "Start with Windows",
+                    self._toggle_startup,
+                    checked=lambda item: startup.is_startup_enabled(),
+                ),
                 pystray.MenuItem("Quit", self._quit),
             ),
         )
@@ -46,6 +52,16 @@ class TrayApp:
             self._paused.clear()
         else:
             self._paused.set()
+        self.icon.update_menu()
+
+    def _toggle_startup(self, _icon, _item) -> None:
+        try:
+            if startup.is_startup_enabled():
+                startup.disable_startup()
+            else:
+                startup.enable_startup()
+        except OSError:
+            log.exception("failed to toggle Windows startup")
         self.icon.update_menu()
 
     def _quit(self, _icon, _item) -> None:
