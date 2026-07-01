@@ -50,7 +50,6 @@ class TrayApp:
 
     def _quit(self, _icon, _item) -> None:
         self._stop.set()
-        activity.keep_awake(False)
         self.icon.stop()
 
     def _set_state(self, state: str) -> None:
@@ -83,6 +82,7 @@ class TrayApp:
             self.icon.run()
         finally:
             self._stop.set()
+            thread.join(timeout=POLL_INTERVAL + 2)
             activity.keep_awake(False)
 
 
